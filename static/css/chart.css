@@ -1,0 +1,25 @@
+.rader { 
+  width: 50vw; 
+  } 
+
+select { 
+    width: 100vw; 
+  } 
+
+#StatusScoreTable,#PrebanImg {
+  width: 45vw;
+}
+
+td, tr {
+  line-height: 100%;
+  font-size: 100%;
+  color: midnightblue;
+  background-color: whitesmoke;
+  text-align: left;
+  margin: auto;
+  padding: auto;
+}
+
+.flex{
+  display:flex;
+}

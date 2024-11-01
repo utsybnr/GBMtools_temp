@@ -1,0 +1,150 @@
+[33mcommit f630be4145059a424a4ead7dea2be98a45a7e3b2[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sat Nov 27 02:43:28 2021 +0900
+
+    パーツ絞り込み追加
+
+[33mcommit 9fb46bdf37e74608ab681be0ac0960b28af5587c[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Mon Nov 15 04:22:56 2021 +0900
+
+    チャート追加
+
+[33mcommit 7e495aa5062962260c68bd98d6a67556564253c5[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Wed Oct 20 03:01:25 2021 +0900
+
+    ignore取消
+
+[33mcommit 5b827e88b0407272c720cf7d781ee97103cbebec[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Wed Oct 20 02:55:09 2021 +0900
+
+    ignore追加
+
+[33mcommit 9459d4041c2801b90cc7323186d418e86ad9c6df[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Wed Oct 20 02:28:29 2021 +0900
+
+    ブログ追加テスト
+
+[33mcommit 497f85f445520894c07da8af791019e7423b66af[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sun Jul 18 11:56:27 2021 +0900
+
+    属性追加
+
+[33mcommit 4b94917839d9cb287f9d1ceecebd391b3d3b1749[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sun Jul 18 01:45:42 2021 +0900
+
+    debugfalse
+
+[33mcommit 9570a4b730a9852cf04e40aade19f1a9bd3e6dfe[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sun Jul 18 01:44:55 2021 +0900
+
+    不足追加
+
+[33mcommit ec333b525dd0e32df2d5abb10ce6aed03c6ce043[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sun Jun 6 17:53:11 2021 +0900
+
+    パーツのみ検索できるようクエリ追加
+
+[33mcommit 2284d3bcad4f531b0b49006d2517a8f3521f9f38[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sun Jun 6 17:34:01 2021 +0900
+
+    デメリット追加
+
+[33mcommit 2cc42fd424111958c4f39a3c2a2b2cc6ba632554[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sun Jun 6 17:20:46 2021 +0900
+
+    微調整
+
+[33mcommit bad85830dcaaff93408e9f17f92279e5e900c510[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sun Jun 6 17:11:42 2021 +0900
+
+    ワードタグ検索機能追加
+
+[33mcommit a140245afd824afe56e33f81551d2d14be34026a[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Thu May 27 01:42:40 2021 +0900
+
+    リロード追加
+
+[33mcommit f6a139f24c9698599b7cecc256683780c0078416[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sat May 8 18:06:53 2021 +0900
+
+    フリーワード追加他
+
+[33mcommit 8f568c241c32e4e24646d9f3d57dfd8840b59e18[m
+Merge: e69c61b e847ce2
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sun Feb 21 02:07:57 2021 +0900
+
+    Merge branch 'master' of https://github.com/utsybnr/GBMtools
+
+[33mcommit e69c61bb422534a37181d189171ded76ba7a4d6a[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sun Feb 21 02:07:31 2021 +0900
+
+    minor
+
+[33mcommit c1854462f4bf306970198a2fd0528d23905e1f43[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sun Feb 21 01:58:19 2021 +0900
+
+    改造big対応他
+
+[33mcommit e847ce2fe159b65f1ea05e65b86a866d15fc7f39[m
+Author: utsybnr <78270245+utsybnr@users.noreply.github.com>
+Date:   Sun Feb 14 23:45:09 2021 +0900
+
+    Update settings.py
+
+[33mcommit 4c575567e275d0e09bf29cc18c336d1bd7d375f9[m
+Author: utsybnr <78270245+utsybnr@users.noreply.github.com>
+Date:   Sun Feb 14 23:44:33 2021 +0900
+
+    Update settings.py
+
+[33mcommit 41745d29563953f4d491e7a646ce0ab9f0a998aa[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sun Feb 14 23:40:32 2021 +0900
+
+    dbupdate
+
+[33mcommit 91804e35ce7f3789f6102a6e9fa5c7fb21ccc223[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sun Feb 14 19:22:03 2021 +0900
+
+    css
+
+[33mcommit f96fb52dc5bca82857892f340d2ebf3a71d022e8[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sun Feb 14 19:15:55 2021 +0900
+
+    debugfalse
+
+[33mcommit 3669b25363be2e4d43bdc5ecd3986b2e3532ca0b[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sun Feb 14 18:50:01 2021 +0900
+
+    css追加、%の検索他
+
+[33mcommit 97039a8289db0597869e27edf4b9c0b238da83a8[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sun Feb 7 00:25:56 2021 +0900
+
+    威力上昇の制御追加他
+
+[33mcommit 1e77cef05555d89b27c087a50cb5152aa0f0fc05[m
+Author: utsybnr <heero_overnight@icloud.com>
+Date:   Sun Jan 31 09:50:18 2021 +0900
+
+    新規追加

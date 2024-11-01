@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>バッジ検索用ページ</title>
+  <link href="{% static 'css/searchtraits.css' %}" rel="stylesheet">
+  <meta name="description" content="ガンダムブレイカーモバイルの「バッジ交換チケット」の表です。ブラウザの検索機能で検索して、欲しいバッジの位置確認に使ってください。">
+{% endblock %}   
+
+{% block navtitle %}バッジ検索用ページ{% endblock %}
+
+{% block content %}
+<div class="alert alert-primary" role="alert">
+<p>ブラウザの検索機能で検索して、欲しいバッジの位置確認に使ってください。</p>
+<p>※改造画面でバッジ名称を確認してから使ってください。</p>
+<p>※誤ったバッジを交換した場合でも、責任は負いかねます。同名別属性は特に注意してください。</p>
+<p>※検索時：Z(ゼット)とΖ(ゼータ)の違い、ギリシャ数字(すべて一文字です)に注意してください。</p>
+</div>
+  <table class="table">
+    <tr>
+      <td>エクシアリペアⅣ</td>
+      <td>フルアーマーΖΖ</td>
+      <td>シナンジュ</td>
+    </tr>
+    <tr>
+      <td>V2アサルトバスター</td>
+      <td>トライバーニング</td>
+      <td>ジャスティスナイト</td>
+    </tr>
+    <tr>
+      <td>ヘリオス</td>
+      <td>シアクアンタ</td>
+      <td>フルセイバー</td>
+    </tr>
+    <tr>
+      <td>リヴランスヘブン</td>
+      <td>ヤークトアルケー</td>
+      <td>【P】FA・ユニコーン</td>
+    </tr>
+    <tr>
+      <td>νガンダム</td>
+      <td>ホットスクランブル</td>
+      <td>【P】ジャスティス</td>
+    </tr>
+    <tr>
+      <td>Pストライクフリーダム</td>
+      <td>ファントム</td>
+      <td>スカイメビウス</td>
+    </tr>
+    <tr>
+      <td>【T】フリーダム</td>
+      <td>Hi-νHWS第2[Ver.Ka]</td>
+      <td>アスクレプオス</td>
+    </tr>
+    <tr>
+      <td>ラヴファントム</td>
+      <td>【T】ユニコーン</td>
+      <td>OOコマンドクアンタ</td>
+    </tr>
+    <tr>
+      <td>バルバタウロス</td>
+      <td>百式改</td>
+      <td>エクリプス</td>
+    </tr>
+    <tr>
+      <td>バルバリック</td>
+      <td>セカンドV</td>
+      <td>ラファエル</td>
+    </tr>
+    <tr>
+      <td>CodeSora</td>
+      <td>ウイングゼロ</td>
+      <td>ユーラヴェン[最終決戦]</td>
+    </tr>
+    <tr>
+      <td>【T】強化型ΖΖ[Ver.Ka]</td>
+      <td>ライトニングΖ</td>
+      <td>ザンライザー</td>
+    </tr>
+    <tr>
+      <td>アスタロトオリジン</td>
+      <td>【P】Ζ</td>
+      <td>トールギスF[EW]</td>
+    </tr>
+    <tr>
+      <td>【T】キュベレイ</td>
+      <td>【S】クシャトリヤ</td>
+      <td>A-Z</td>
+    </tr>
+    <tr>
+      <td>イージスナイト</td>
+      <td>ミスサザビー</td>
+      <td>【P】サバーニャ</td>
+    </tr>
+    <tr>
+      <td>ジャイオーン</td>
+      <td>【S】ジ・O</td>
+      <td>【S】フルクロス</td>
+    </tr>
+
+    <tr>
+      <td>【S】ハルート</td>
+      <td>ウイングゼロ[ピースクラフト/EW]</td>
+      <td>フェネクス/type RC</td>
+    </tr>
+
+    <tr>
+      <td>【T】スタービルドストライク</td>
+      <td>【P】バルバトスルプス</td>
+      <td>【T】バンシィ</td>
+    </tr>
+
+    <tr>
+      <td>【S】フルセイバー</td>
+      <td>【T】Sフリーダム</td>
+      <td>【P】ウイングゼロEW</td>
+    </tr>
+
+    <tr>
+      <td>【S】FA・ユニコーン</td>
+      <td>シェヘラザード</td>
+      <td>インパルスR</td>
+    </tr>
+
+    <tr>
+      <td>リボーンズ</td>
+      <td>エピオン[EW]</td>
+      <td>Hi-ν[Ver.Ka]</td>
+    </tr>
+
+    <tr>
+      <td>ペルフェクティビリティ</td>
+      <td>エクシアダークマター</td>
+      <td>スタービルドストライク</td>
+    </tr>
+
+    <tr>
+      <td>ガンダム魔王</td>
+      <td>ターンレッド</td>
+      <td>ペーネロペー</td>
+    </tr>
+
+    <tr>
+      <td>Ξ</td>
+      <td>ビルドストライクGC</td>
+      <td>シナンジュ・スタイン[NT]</td>
+    </tr>
+
+    <tr>
+      <td>アカツキ</td>
+      <td>AGE-FX</td>
+      <td>ダブルエックス</td>
+    </tr>
+
+    <tr>
+      <td>魔竜剣士</td>
+      <td>AGEⅡマグナム[SVver.]</td>
+      <td>Iジャスティス</td>
+    </tr>
+
+    <tr>
+      <td>Sフリーダム</td>
+      <td>クシャトリヤ・リペアード</td>
+      <td>ユニコーン[光の結晶体]</td>
+    </tr>
+    <tr>
+      <td>OOライザー</td>
+      <td>デスティニー</td>
+      <td>WGプロトゼロ[WE]</td>
+    </tr>
+    <tr>
+      <td>クアンタ</td>
+      <td>ヴィダール</td>
+      <td>バルバトスルプス</td>
+    </tr>
+    <tr>
+      <td>烈光頑駄無[烈光の鎧]</td>
+      <td>アメイジングRW</td>
+      <td>サザビー[Ver.Ka]</td>
+    </tr>
+    <tr>
+      <td>X魔王</td>
+      <td>ナラティブ[C装備]</td>
+      <td>ターンX</td>
+    </tr>
+    <tr>
+      <td>∀ガンダム</td>
+      <td>フルクロス</td>
+      <td>ダブルオースカイ</td>
+    </tr>
+    <tr>
+      <td>Ex-S</td>
+      <td>Hi-νガンダムHWS[Ver.Ka]</td>
+      <td>サザビー</td>
+    </tr>
+    <tr>
+      <td>騎士ユニコーン</td>
+      <td>G-セルフ[Pパック装備型]</td>
+      <td>キマリスヴィダール</td>
+    </tr>
+    <tr>
+      <td>ルプスレクス</td>
+      <td>デスティニー[HW]</td>
+      <td>レジェンド</td>
+    </tr>
+    <tr>
+      <td>トランジェント</td>
+      <td>セブンソード/G</td>
+      <td>フェネクス</td>
+    </tr>
+    <tr>
+      <td>強化型ΖΖ[Ver.Ka]</td>
+      <td>キュベレイ</td>
+      <td>【ハルート】</td>
+    </tr>
+    <tr>
+      <td>【サバーニャ】</td>
+      <td>【Hi-νガンダム】</td>
+      <td>【ナイチンゲール】</td>
+    </tr>
+
+    <tr>
+      <td>【ジャスティス】</td>
+      <td>【フリーダム】</td>
+      <td>【トールギスⅢ[EW]】</td>
+    </tr>
+
+    <tr>
+      <td>【アストレイRD】</td>
+      <td>【バンシィ・ノルン】</td>
+      <td>【FA・ユニコーン】</td>
+    </tr>
+
+    <tr>
+      <td>Bバッジ</td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+{% endblock %}   
+
+{% block extrajs %}
+<script>
+  </script>
+{% endblock %}   

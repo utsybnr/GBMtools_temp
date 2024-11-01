@@ -1,0 +1,34 @@
+#WordTag1, #WordTag2 { 
+  width: 100px; 
+  } 
+
+select { 
+  width: 200px; 
+  } 
+
+.maintext{
+  color: #1a73e8;
+  text-decoration:underline solid;
+}
+
+.maintext_merge{
+  color: #1a73e8;
+  text-decoration:underline solid;
+  vertical-align:middle;
+}
+
+.subtext{
+  font-size: 8pt;
+  color:dimgray;
+  text-decoration:none;
+}
+
+td, tr {
+  line-height: 100%;
+  font-size: 100%;
+  color: midnightblue;
+  background-color: whitesmoke;
+  text-align: left;
+  margin: auto;
+  padding: auto;
+}

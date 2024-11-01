@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>ガンダムブレイカーモバイル特性検索ツール</title>
+  <link href="{% static 'css/searchtraits.css' %}" rel="stylesheet">
+  <meta name="description" content="ガンダムブレイカーモバイルのパーツ特性を検索します。条件/効果を選択すると、公式wikiの検索結果を表示します。非公式外部ツールのため、うまく動作しない場合あり。">
+{% endblock %}   
+
+{% block navtitle %}GBM特性検索(旧Ver){% endblock %}
+
+{% block content %}
+  <table class="table">
+    <form method="get" action="">
+      {% csrf_token %}
+    <tbody>
+      <tr>
+        <th>条件フィルタ</th>
+        <td>{{ form.ConditionFilter }}</td>
+      </tr>
+      <tr>
+        <th>条件</th>
+        <td>{{ form.Condition }}</td>
+      </tr>
+      <tr>
+        <th>効果フィルタ</th>
+        <td>{{ form.EffectFilter }}</td>
+      </tr>
+      <tr>
+        <th>効果</th>
+        <td>{{ form.Effect }}</td>
+      </tr>
+      <tr>
+        <th>部位</th>
+        <td>{{ form.Part }}</td>
+      </tr>
+      <tr>
+        <th>属性</th>
+        <td>
+        <select id="Attribute">
+        <option value="">---------</option>
+        <option value="Speed">Speed</option>
+        <option value="Technique">Technique</option>
+        <option value="Power">Power</option>
+        </select>
+        </td>
+      </tr>
+      <tr>
+        <th>ワードタグ</th>
+        <td>{{ form.Wordtag1 }}{{ form.Wordtag2 }}</td>
+      </tr>
+      <tr>
+        <th>改造パーツのみ</th>
+        <td>{{ form.isAlter }}</td>
+      </tr>
+      <tr>
+        <th>フリーワード</th>
+        <td><input type="text" id="Freeword"></td>
+      </tr>
+    </tbody>
+    <tr>
+      <th>
+        <input type="button" class="btn btn-primary" value="検索" onClick="SearchTraits()">
+        <!-- <button type="submit" name="submit">Submit</button> -->
+      </th>
+      <td><font color="red">New </font><a href='../chart/list'>ステータスランキング</a></br></br>
+    </tr>
+  </form>
+  </table>
+{% endblock %}   
+
+{% block extrajs %}
+<script>
+  const ConditionFilterElement = $('#ConditionFilter');
+  const ConditionElement = $('#Condition');
+  const EffectFilterElement = $('#EffectFilter');
+  const EffectElement = $('#Effect');
+  const PartElement = $('#Part');
+  const isAlterElement = $('#isAlter');
+  const AttributeElement = $('#Attribute');
+  const Wordtag1Element = $('#Wordtag1');
+  const Wordtag2Element = $('#Wordtag2');
+  const FreewordElement = $('#Freeword');
+  const ClassedCondition = {
+    "0": [
+      {
+        "DisplayName": "---------",
+        "Query": "",
+      },
+      {% for cd1 in form.Condition.field.queryset %}
+        {
+          "DisplayName": "{{ cd1.DisplayName }}",
+          "Query": "{{ cd1.Query }}",
+        },
+      {% endfor %}
+    ],
+
+    {% for cdfilter in form.ConditionFilter.field.queryset %}
+      "{{ cdfilter.id }}": [
+        {% for cd in form.Condition.field.queryset %}
+          {% if cd.FilterID == cdfilter %}
+            {
+              "DisplayName": "{{ cd.DisplayName }}",
+              "Query": "{{ cd.Query }}",
+            },
+          {% endif %}
+        {% endfor %}
+      ],
+    {% endfor %}
+  };
+
+  const ClassedEffect = {
+    "0": [
+      {
+        "DisplayName": "---------",
+        "Query": "",
+      },
+      {% for ef1 in form.Effect.field.queryset %}
+        {
+          "DisplayName": "{{ ef1.DisplayName }}",
+          "Query": "{{ ef1.Query }}",
+        },
+      {% endfor %}
+    ],
+
+    {% for effilter in form.EffectFilter.field.queryset %}
+      "{{ effilter.id }}": [
+        {% for ef in form.Effect.field.queryset %}
+          {% if ef.FilterID == effilter %}
+            {
+              "DisplayName": "{{ ef.DisplayName }}",
+              "Query": "{{ ef.Query }}",
+            },
+          {% endif %}
+        {% endfor %}
+      ],
+    {% endfor %}
+  };
+
+  $(function($) { 
+
+    ConditionFilterElement.change(function(){
+      ConditionElement.children().remove();
+      const parentId = ConditionFilterElement.val();
+      const selectedcategory = parentId =="" ? ClassedCondition["0"] : ClassedCondition[parentId];
+
+      for (const category of selectedcategory) {
+            ConditionElement.append($('<option>').html(category['DisplayName']).val(category['Query']));
+            //console.log(category['DisplayName'] + ':' + category['Query']);
+      }
+    });
+
+    EffectFilterElement.change(function(){
+      EffectElement.children().remove();
+      const parentId = EffectFilterElement.val();
+      const selectedcategory = parentId =="" ? ClassedEffect["0"] : ClassedEffect[parentId];
+
+      for (const category of selectedcategory) {
+            EffectElement.append($('<option>').html(category['DisplayName']).val(category['Query']));
+            //console.log(category['DisplayName'] + ':' + category['Query']);
+      }
+      EffectElement.change();
+    });
+
+    EffectElement.change(function(){
+      if($(EffectElement).val().match(/パーツの|リロード速度|最大弾数/)){
+        ConditionFilterElement.val('');
+        ConditionFilterElement.change();
+      };
+    });
+
+  });
+ 
+  let SearchTraits =()=> {
+    const isAlterElementval = (isAlterElement.prop('checked')) ? isAlterElement.val() : "";
+    const FreewordElementval = FreewordElement.val().replace(/　| /g,"\" \"");
+
+    let query;
+    switch(EffectElement.val().charAt(0)){
+      case "時":
+        query = (ConditionElement.val()!="") ?
+          ConditionElement.val() + EffectElement.val().slice(1)
+          : ConditionElement.val() + EffectElement.val();
+        break;
+      case "%":
+        query = ConditionElement.val() + "\" \"" + EffectElement.val().slice(1);
+        break;
+      default:
+        query = ConditionElement.val() + EffectElement.val();
+        break;
+    };
+
+    query = (AttributeElement.val()!="") ?
+      query + "\" \"" + "属性" + AttributeElement.val()
+      : query;
+
+    query = (Wordtag1Element.val()!="") ?
+      query + "\" \"" + Wordtag1Element.val() + "発動時"
+      : query;
+
+      query = (Wordtag2Element.val()!="") ?
+      query + "\" \"" + Wordtag2Element.val() + "発動時"
+      : query;
+
+    query = query + "\" \"" + PartElement.val() + "\" \"" + isAlterElementval + "\" \"" + FreewordElementval + "\" \"の各種データを掲載しています。部位\""
+
+    return open("https://wiki.dengekionline.com/gbm/-/pages/search?q=\"" + query, '_blank'); 
+  }
+  </script>
+{% endblock %}   

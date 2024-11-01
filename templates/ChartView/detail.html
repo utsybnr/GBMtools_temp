@@ -1,0 +1,294 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<title>GBMパーツ性能比較</title>
+<link href="{% static 'css/chart.css' %}" rel="stylesheet">
+
+{% endblock %}   
+
+{% block navtitle %}パーツ/機体詳細　<input type="button" class="btn btn-light btn-sm" id="random" value="ランダム表示">
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<form action="" method="get" id="UnitName">
+    {{ form.UnitField }}
+    {{ form.PartsField }}
+    {{ form.HiddenPartsField }}
+</form>
+<button type="button" 
+        class={% if form.MS1.Attribute == "Speed" %}"btn btn-primary"{% elif form.MS1.id_Speed %}"btn btn-secondary"{% else %}"btn btn-outline-secondary"{% endif %}
+        {% if not form.MS1.id_Speed %}disabled{% endif %}
+        onclick="goAnother({{ form.MS1.id_Speed }})"
+        >S</button>
+<button type="button" 
+        class={% if form.MS1.Attribute == "Technique" %}"btn btn-primary"{% elif form.MS1.id_Technique %}"btn btn-secondary"{% else %}"btn btn-outline-secondary"{% endif %}
+        {% if not form.MS1.id_Technique %}disabled{% endif %}
+        onclick="goAnother({{ form.MS1.id_Technique }})"
+        >T</button>
+<button type="button" 
+        class={% if form.MS1.Attribute == "Power" %}"btn btn-primary"{% elif form.MS1.id_Power %}"btn btn-secondary"{% else %}"btn btn-outline-secondary"{% endif %}
+        {% if not form.MS1.id_Power %}disabled{% endif %}
+        onclick="goAnother({{ form.MS1.id_Power }})"        
+        >P</button>
+<button type="button" 
+        class={% if form.MS1.id == form.MS1.id_beforeAlter %}"btn btn-primary"{% elif form.MS1.id_beforeAlter %}"btn btn-secondary"{% else %}"btn btn-outline-secondary"{% endif %}
+        {% if not form.MS1.id_beforeAlter %}disabled{% endif %}
+        onclick="goAnother({{ form.MS1.id_beforeAlter }})"        
+        >改造前</button>
+<button type="button" 
+        class={% if form.MS1.id == form.MS1.id_afterAlter %}"btn btn-primary"{% elif form.MS1.id_afterAlter %}"btn btn-secondary"{% else %}"btn btn-outline-secondary"{% endif %}
+        {% if not form.MS1.id_afterAlter %}disabled{% endif %}
+        onclick="goAnother({{ form.MS1.id_afterAlter }})"        
+        >改造後</button>
+        <!-- パーツがprimaryにならない... -->
+<p>
+    {{ form.WordtagCount }}{% if form.MS1.CombinedCategory %}×2{% endif %}
+    {% if form.MS1.Wordtag_Speed %}<br>+S:{{ form.MS1.Wordtag_Speed }}{% endif %}
+    {% if form.MS1.Wordtag_Technique %}<br>+T:{{ form.MS1.Wordtag_Technique }}{% endif %}
+    {% if form.MS1.Wordtag_Power %}<br>+P:{{ form.MS1.Wordtag_Power }}{% endif %}
+</p>
+<p>{% if form.MS1.Category == "AI" %}{{ form.MS1.Joblisence }} {{ form.MS1.AItype }}{% endif %}</p>
+
+<canvas id="radar-chart" class="rader"></canvas>
+<p></p>
+{% if form.MS1.SkillName %}
+<table class="table table-sm" id="SkillTable">
+    <thead>
+        <tr>
+            <th scope="col">Skill</th>
+            <th scope="col">Category</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ form.MS1.SkillName }}</td>
+            <td>{{ form.MS1.SkillCategory }}</td>
+        </tr>
+        <tr>
+            <td colspan="2">{{ form.MS1.SkillText }}</td>
+        </tr>
+    </tbody>
+<table class="table table-sm" id="SkillDetail">
+    <thead>
+        <tr>
+            {% if form.MS1.SLv1Pierce %}<th scope="col">Pierce</th>{% endif %}
+            {% if form.MS1.SLv1Power %}<th scope="col">Power</th>{% endif %}
+            {% if form.MS1.SLv1Magazine %}<th scope="col">Magazine</th>{% endif %}
+            {% if form.MS1.SLv1Effect %}<th scope="col">Effect</th>{% endif %}
+            {% if form.MS1.SLv1Effecttime %}<th scope="col">Effecttime</th>{% endif %}
+            {% if form.MS1.SLv1Cooldown %}<th scope="col">Cooldown</th>{% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {% if form.MS1.SLv1Pierce %}<td>{{ form.MS1.SLv1Pierce }}</br>~{{ form.MS1.SLv10Pierce }}</td>{% endif %}
+            {% if form.MS1.SLv1Power %}<td>{{ form.MS1.SLv1Power }}</br>~{{ form.MS1.SLv10Power }}</td>{% endif %}
+            {% if form.MS1.SLv1Magazine %}<td>{{ form.MS1.SLv1Magazine }}</br>~{{ form.MS1.SLv10Magazine }}</td>{% endif %}
+            {% if form.MS1.SLv1Effect %}<td>{{ form.MS1.SLv1Effect }}</br>~{{ form.MS1.SLv10Effect }}</td>{% endif %}
+            {% if form.MS1.SLv1Effecttime %}<td>{{ form.MS1.SLv1Effecttime }}</br>~{{ form.MS1.SLv10Effecttime }}</td>{% endif %}
+            {% if form.MS1.SLv1Cooldown %}<td>{{ form.MS1.SLv1Cooldown }}</br>~{{ form.MS1.SLv10Cooldown }}</td>{% endif %}
+        </tr>
+    </tbody>
+</table>
+{% endif %}
+{% if form.MS1.Traits1Name %}
+<table class="table table-sm" id="TraitsTable">
+    <thead>
+        <tr>
+            <th scope="col">Trait</th>
+            <th scope="col">Value</th>
+          </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ form.MS1.Traits1Name }}</td>
+            <td>{{ form.MS1.T1Lv1Effect }}~{{ form.MS1.T1Lv10Effect }}</td>
+        </tr>
+        {% if form.MS1.Traits2Name %}
+        <tr>
+            <td>{{ form.MS1.Traits2Name }}</td>
+            <td>{{ form.MS1.T2Lv1Effect }}~{{ form.MS1.T2Lv10Effect }}</td>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>
+{% endif %}
+<!-- <p>上段：機体(頭、胴、腕、脚、背の合計)</br>
+    下段：各パーツ</br>
+    Lv99、証込。「スコア」で偏差値表示。</p> -->
+<!-- 一体型パーツ(があるか)どうかを表示したい -->
+
+{% if PrebanCode %}
+<a target='new' HREF="https://click.linksynergy.com/link?id=s1EgwT6SyEM&offerid=791781.{{PrebanCode}}&type=2&murl=https%3A%2F%2Fp-bandai.jp%2Fitem%2Fitem-{{PrebanCode}}%2F%3Futm_source%3Dutm_medium%3Daffiliate%26utm_term%3D{{PrebanCode}}">{{PrebanName}}</A>
+<IMG border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=s1EgwT6SyEM&bids=791781.{{PrebanCode}}&type=15&subid=0">
+<br>
+{% endif %}
+<div class="flex">
+{% if PrebanCode %}
+<a target='new' HREF="https://click.linksynergy.com/link?id=s1EgwT6SyEM&offerid=791781.{{PrebanCode}}&type=2&murl=https%3A%2F%2Fp-bandai.jp%2Fitem%2Fitem-{{PrebanCode}}%2F%3Futm_source%3Dutm_medium%3Daffiliate%26utm_term%3D{{PrebanCode}}">
+<IMG border=0 id="PrebanImg" src="https://bandai-a.akamaihd.net/bc/img/model/b/{{PrebanCode}}_1.jpg"></A>
+<IMG border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=s1EgwT6SyEM&bids=791781.{{PrebanCode}}&type=15&subid=0"></IMG>
+{% endif %}
+<table class=" table table-sm" id="StatusScoreTable">
+    <thead>
+      <!-- <tr>
+        <th scope="col"></th>
+        <th scope="col">Status</th>
+        <th scope="col">DifFromAverage</th>
+      </tr> -->
+    </thead>
+</table>
+</div>
+
+{% if GundamwikiName %}
+<div style="padding: 10px; margin-bottom: 5px; border: 1px dotted #333333;">
+    {{GundamwikiIntro}}...
+    <button type="button" class="btn btn-link" onClick="window.open('https://gundam.wiki.cre.jp/wiki/{{GundamwikiName}}','_blank')"><font size="2px">ガンダムwikiで続きを読む</font></button>
+</div>
+
+<p></p>
+{% endif %}
+
+{% if ShowcaseTweet %}
+<p>公式Twitterの紹介動画：</p>
+<!-- そのままだとタグもテキストで表示される https://qol-kk.com/wp2/blog/2020/11/30/post-2270/ -->
+{% autoescape off %}
+{{ ShowcaseTweet }}
+{% endautoescape %}
+{% endif %}
+
+<p></p>
+<p></p>
+
+{% endblock %}   
+
+{% block extrajs %}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+
+<script type="text/javascript">
+//https://djangobrothers.com/blogs/chartjs_usage/
+var ctx = document.getElementById("radar-chart");
+var dataset = [
+    {name:"Armor", status:"{{ form.MS1.Lv99Armor }}", score:('{{ form.MS1.Lv99Armor }}'-'{{ MSAverage.Lv99Armor }}')/'{{ MSStdDev.Lv99Armor }}'*10+50, average:'{{ MSAverage.Lv99Armor }}'},
+    {name:"MeleeATK", status:"{{ form.MS1.Lv99MeleeATK }}", score:('{{ form.MS1.Lv99MeleeATK }}'-'{{ MSAverage.Lv99MeleeATK }}')/'{{ MSStdDev.Lv99MeleeATK }}'*10+50, average:'{{ MSAverage.Lv99MeleeATK }}'},
+    {name:"ShotATK", status:"{{ form.MS1.Lv99ShotATK }}", score:('{{ form.MS1.Lv99ShotATK }}'-'{{ MSAverage.Lv99ShotATK }}')/'{{ MSStdDev.Lv99ShotATK }}'*10+50, average:'{{ MSAverage.Lv99ShotATK }}'},
+    {name:"MeleeDEF", status:"{{ form.MS1.Lv99MeleeDEF }}", score:('{{ form.MS1.Lv99MeleeDEF }}'-'{{ MSAverage.Lv99MeleeDEF }}')/'{{ MSStdDev.Lv99MeleeDEF }}'*10+50, average:'{{ MSAverage.Lv99MeleeDEF }}'},
+    {name:"ShotDEF", status:"{{ form.MS1.Lv99ShotDEF }}", score:('{{ form.MS1.Lv99ShotDEF }}'-'{{ MSAverage.Lv99ShotDEF }}')/'{{ MSStdDev.Lv99ShotDEF }}'*10+50, average:'{{ MSAverage.Lv99ShotDEF }}'},
+    {name:"BeamRES", status:"{{ form.MS1.Lv99BeamRES }}", score:('{{ form.MS1.Lv99BeamRES }}'-'{{ MSAverage.Lv99BeamRES }}')/'{{ MSStdDev.Lv99BeamRES }}'*10+50, average:'{{ MSAverage.Lv99BeamRES }}'},
+    {name:"PhysRES", status:"{{ form.MS1.Lv99PhysRES }}", score:('{{ form.MS1.Lv99PhysRES }}'-'{{ MSAverage.Lv99PhysRES }}')/'{{ MSStdDev.Lv99PhysRES }}'*10+50, average:'{{ MSAverage.Lv99PhysRES }}'}
+]
+//レーダーチャート用に並び替え
+var datasetforchart = [dataset[0], dataset[1], dataset[3], dataset[5], dataset[6], dataset[4], dataset[2]]
+
+//スコア
+//https://www.life-trace.net/entry/2019/10/31/235114
+var myRadarChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+        labels: datasetforchart.map(item => item.name),
+        datasets: [
+        {   data: datasetforchart.map(item => item.score),
+            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+            borderColor: 'rgba(255, 99, 132, 0.9)',
+            pointBackgroundColor: 'rgba(255, 99, 132, 0.9)',
+            pointBorderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 3,
+            pointRadius: 3,
+        }, 
+        {   data: [50,50,50,50,50,50,50],
+            backgroundColor: 'rgba(0, 0, 255, 0.3)',
+            borderColor: 'rgba(0, 0, 255, 0.5)',
+            pointBackgroundColor: 'rgba(0, 0, 255, 0.5)',
+            pointBorderColor: 'rgba(0, 0, 255, 0.5)',
+            borderWidth: 2,
+            pointRadius: 2,
+        }
+            ]},
+    options : {
+        scale: {
+            ticks: {
+                min: 25,
+                max: 100,
+                stepSize: 25,
+                backdropColor: 'rgba(255, 255, 255, 0)',
+        }},
+        animation: false,
+        legend: {
+            display: false
+         }
+    }        
+});
+
+//一覧HTML(StatusScoreTable)のBody生成
+var insertHTML='<tbody>';
+for (const currentdata of dataset){
+    insertHTML += '\
+    <tr>\
+    <th scope="row">'+ currentdata.name +'</th>'
+    scoredif = Math.round(currentdata.score)-50
+
+    // 赤or青の色設定
+    if (scoredif >= 0){
+        insertHTML += '\
+        <td style="background-color: rgb(255,'+(255-scoredif*5)+', '+(255-scoredif*5)+');"><b>'+ currentdata.status +'</b></td>'
+        // <td style="background-color: rgb(255,'+(255-scoredif*5)+', '+(255-scoredif*5)+');">(+'+ String(currentdata.status-Math.round(currentdata.average)) +')</td>'
+    }else{
+        insertHTML += '\
+        <td style="background-color: rgb('+(255+scoredif*5)+', '+(255+scoredif*5)+', 255);">'+ currentdata.status +'</td>'
+        // <td style="background-color: rgb('+(255+scoredif*5)+', '+(255+scoredif*5)+', 255);">('+ String(currentdata.status-Math.round(currentdata.average)) +')</td>'
+    }
+    insertHTML += '</tr>'
+}
+//https://techacademy.jp/magazine/33975#ta-toc-3
+document.getElementById('StatusScoreTable').insertAdjacentHTML('beforeend', insertHTML)
+//うまくエスケープできていない模様。<>がltgtなってる？
+
+//https://www-creators.com/archives/4463
+function getParam(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function goAnother(NextId){
+    if ($('#Parts').val()==''){
+        $('#Unit').val(NextId);
+    }else{
+        // 別属性は選択肢にない→存在しない値は指定できないため、hdnを別途作ってそこに設定
+        $('#hdnParts').val(NextId);
+    }
+    $('#UnitName').submit();
+}
+
+$(function() {
+    $('.select2box').select2({
+        language: "ja" //日本語化
+    });
+
+    $('#Unit').on('change', function(){
+        $('#Parts').val('');
+    });
+
+    $('#random').on('click', function(){
+        //https://www.sejuku.net/blog/22432
+        $('#Unit').val(Math.floor( Math.random() * $('#Unit').children('option').length ));
+        $('#Parts').val('');
+        $('#UnitName').submit();
+    });    
+
+    $('#chartstyle').change(function(){
+
+        document.getElementById("radar-chart").hidden =!document.getElementById("radar-chart").hidden;
+        document.getElementById("StatusScoreTable").hidden =!document.getElementById("StatusScoreTable").hidden;
+
+    });
+});
+
+</script>
+{% endblock %}   

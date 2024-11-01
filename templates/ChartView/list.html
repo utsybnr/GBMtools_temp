@@ -1,0 +1,313 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>GBMステータスランキング</title>
+  <link href="{% static 'css/list.css' %}" rel="stylesheet">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+  <link href="{% static 'css/searchtraits.css' %}" rel="stylesheet">
+{% endblock %}   
+
+{% block navtitle %}
+特性検索
+<button class="btn btn-light btn-sm"
+data-toggle="collapse"
+data-target="#SearchFormDetail"
+aria-expand="false"
+aria-controls="SearchFormDetail"
+id="DetailOpener">絞り込み</button>
+{% endblock %}
+
+{% block content %}
+<form method="get" action="" id="SearchForm" name="SearchForm">
+  {% csrf_token %}
+    <div class="collapse" id="SearchFormDetail" name="SearchFormDetail">
+    <table class="table">
+        <tbody>
+          <tr>
+            <th>属性</th>
+            <td>
+              {{ form.Attribute }}
+            </td>
+          </tr>
+          <tr>
+            <th>ワードタグ</th>
+            <td>
+              {{ form.Wordtag1 }}{{ form.Wordtag2 }}<br><br>
+              {{ form.includeSubWordtag }}<label for="includeSubWordtag">★7は別属性のタグも含む</label>
+            </td>
+          </tr>
+          <tr>
+            <th></th>
+            <td></td>
+          </tr>
+          <tr>
+            <th>特性フィルタ</th>
+            <td>{{ form.EffectFilter1 }}{{ form.EffectFilter2 }}</td>
+          </tr>
+          <tr>
+            <th>特性</th>
+            <td>{{ form.Effect1 }}{{ form.Effect2 }}</td>
+          </tr>
+          <tr>
+            <th>
+              <button class="btn"
+                type="button"
+                data-toggle="collapse"
+                data-target="#TraitOption"
+                aria-expand="false"
+                aria-controls="TraitOption"
+                id="TraitOptionOpener">
+              特性オプション
+            </button>
+            </th>
+            <td>
+              <div class="collapse" id="TraitOption" name="TraitOption">
+                {{ form.TraitAttribute }}<br>{{ form.TraitWordtag1 }}<br>{{ form.TraitWordtag2 }}<br>{{ form.TraitWordtag3 }}<br>の機体で発動可能<br><br>
+                {{ form.isArenaTraits }}<label for="isArenaTraits">即発動が不可のものを除外する</label><br><br>
+                {{ form.isSoloTraits }}<label for="isSoloTraits">小隊が必要な特性を除外する</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <button class="btn"
+                  type="button"
+                  data-toggle="collapse"
+                  data-target="#AIOption"
+                  aria-expand="false"
+                  aria-controls="AIOption"
+                  id="AIOptionOpener">
+                AIオプション
+              </button>
+            </th>
+            <td>
+              <div class="collapse" id="AIOption" name="AIOption">
+                {{ form.AIDistance }}{{ form.AIType }}
+              </div>
+            </td>
+          </tr>
+          <!-- <tr>
+            <th>フリーワード</th>
+            <td><input type="text" id="Freeword"></td>
+          </tr> -->
+        </tbody>
+        <tr>
+          <th style="text-align: center; vertical-align: middle;" rowspan="2">
+            <button type="submit" class="btn btn-primary">適用</button>
+          </th>
+          <td style="text-align: right; vertical-align: middle;"><a href="/search/combination"><font color="red" ><B>New </B></font>メイン＋サブランキング</a></td>
+        </tr>
+        <tr>
+          <td style="text-align: right; vertical-align: middle;"><a href="/search/badge"><font color="red" ><B>New </B></font>バッジ検索用ページ</a></td>
+        </tr>
+    </table>
+    </div>
+    {{ form.SelectStatusType }}
+    {{ form.SelectCategory }}
+
+    {% if form.SelectCategory.initial == "MeleeWeapon" %}
+    {{ form.MeleeWeapon }}
+    {% elif form.SelectCategory.initial == "ShotWeapon" %}
+    {{ form.ShotWeapon }}
+    {% elif form.SelectCategory.initial == "AI" %}
+    {{ form.Joblisence }}
+    {% endif %}
+    <p></p>
+    <div class="form-check" style="display: inline-block; _display: inline;">
+      {{ form.withGear }}
+      <label class="form-check-label" for="withGear">変換ギア(40%)</label>
+    </div>
+    <div class="form-check" style="display: inline-block; _display: inline;">
+      {{ form.withCombinedParts }}
+      <label class="form-check-label" for="withCombinedParts">一体型パーツ</label>
+    </div>
+    <div class="form-check" style="display: inline-block; _display: inline;">
+      {{ form.isAlter }}
+      <label class="form-check-label" for="isAlter">改造パーツのみ</label>
+    </div>  
+</form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">PartsName</th>
+                <th scope="col">{{ SelectedStatus }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cobj in StatusList %}
+            <tr onclick="gotodetail({{ cobj.id }});" >
+                <th scope="row">
+                  <div class="maintext">
+                    {{ cobj.PartsName }}({{ cobj.Attribute }})
+                    {% if cobj.CombinedCategory %}
+                        <font color="#ff6666"> +{{ cobj.CombinedCategory }}</font>
+                        
+                    {% endif %}
+                  </div>
+                  <div class="subtext">
+                    {% if form.SelectCategory.initial == "MeleeWeapon" or form.SelectCategory.initial == "ShotWeapon" %}<br>{{ cobj.Category }}{% endif %}
+                    {% if cobj.Category == "AI" %}<br>{{ cobj.Joblisence }}　{{ cobj.AItype }}{% endif %}
+                    {% if cobj.Traits1Name %}<br>{{ cobj.Traits1Name }}{% endif %}
+                    {% if cobj.Traits2Name %}<br>{{ cobj.Traits2Name }}{% endif %}
+                    {% if cobj.SkillName %}<br>{{ cobj.SkillName }}{% endif %}
+                  </div>
+                </th>
+                <td>
+                  <div class="maintext">
+                    {{ cobj.SelectedStatus|floatformat:0 }}
+                  </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}   
+{% block extrajs %}
+<script type="text/javascript">
+  // searchtraitsのJSonload
+  const EffectFilter1Element = $('#EffectFilter1');
+  const Effect1Element = $('#Effect1');
+  const EffectFilter2Element = $('#EffectFilter2');
+  const Effect2Element = $('#Effect2');
+  const PartElement = $('#Part');
+  const AttributeElement = $('#Attribute');
+  const Wordtag1Element = $('#Wordtag1');
+  const Wordtag2Element = $('#Wordtag2');
+  const FreewordElement = $('#Freeword');
+
+  const ClassedEffect = {
+    "0": [
+      {
+        "DisplayName": "---------",
+        "Query": "",
+      },
+      {% for ef1 in form.Effect.field.queryset %}
+        {
+          "DisplayName": "{{ ef1.DisplayName }}",
+          "Query": "{{ ef1.Query }}",
+        },
+      {% endfor %}
+    ],
+
+    {% for effilter in form.EffectFilter1.field.queryset %}
+      "{{ effilter.id }}": [
+        {% for ef in form.Effect1.field.queryset %}
+          {% if ef.FilterID == effilter %}
+            {
+              "DisplayName": "{{ ef.DisplayName }}",
+              "Query": "{{ ef.Query }}",
+            },
+          {% endif %}
+        {% endfor %}
+      ],
+    {% endfor %}
+  };
+
+if ("{{ Isinitial }}"=="True"){
+  $('#SearchFormDetail').collapse('show');
+};
+if ('{{ SelectedStatus }}'=='MeleeATK' ||'{{ SelectedStatus }}'=='ShotATK'){
+    $('input[name="withGear"]').prop('disabled', false)
+}else{
+    $('input[name="withGear"]').prop('disabled', true)
+}
+
+if ($('#TraitAttribute').val()+$('#TraitWordtag1').val()+$('#TraitWordtag2').val()+$('#TraitWordtag3').val() != "" |
+  $('#isArenaTraits').prop("checked") |
+  $('#isSoloTraits').prop("checked")
+){
+    $('#TraitOptionOpener').addClass('btn-primary');
+  }else{
+    $('#TraitOptionOpener').addClass('btn-outline-primary');
+}
+
+if ($('#AIDistance').val()+$('#AIType').val() != ""){
+    $('#AIOptionOpener').addClass('btn-primary');
+  }else{
+    $('#AIOptionOpener').addClass('btn-outline-primary');
+}
+
+function gotodetail(PartsId){
+    location.href="/search/detail?PartsField=" + PartsId;
+}
+
+$(function($) { 
+
+EffectFilter1Element.change(function(){
+  Effect1Element.children().remove();
+  const parentId = EffectFilter1Element.val();
+  const selectedcategory = parentId =="" ? ClassedEffect["0"] : ClassedEffect[parentId];
+
+  for (const category of selectedcategory) {
+        Effect1Element.append($('<option>').html(category['DisplayName']).val(category['Query']));
+        //console.log(category['DisplayName'] + ':' + category['Query']);
+  }
+});
+
+EffectFilter2Element.change(function(){
+  Effect2Element.children().remove();
+  const parentId = EffectFilter2Element.val();
+  const selectedcategory = parentId =="" ? ClassedEffect["0"] : ClassedEffect[parentId];
+
+  for (const category of selectedcategory) {
+        Effect2Element.append($('<option>').html(category['DisplayName']).val(category['Query']));
+        //console.log(category['DisplayName'] + ':' + category['Query']);
+  }
+});
+
+$('#TraitAttribute, #TraitWordtag1, #TraitWordtag2, #TraitWordtag3, #isArenaTraits, #isSoloTraits').on('change', function(){
+// ボタン押下でクラス変更
+// https://qumeru.com/magazine/451
+  if ($('#TraitAttribute').val()+$('#TraitWordtag1').val()+$('#TraitWordtag2').val()+$('#TraitWordtag3').val() != "" |
+    $('#isArenaTraits').prop("checked") |
+    $('#isSoloTraits').prop("checked")
+  ){
+    $('#TraitOptionOpener').removeClass('btn-outline-primary');
+    $('#TraitOptionOpener').addClass('btn-primary');
+    }else{
+    $('#TraitOptionOpener').removeClass('btn-primary');
+    $('#TraitOptionOpener').addClass('btn-outline-primary');
+  }
+
+});  
+
+$('#AIDistance, #AIType').on('change', function(){
+
+  if ($('#Joblisence').val()+$('#AIDistance').val() != ""){
+    $('#SelectCategory').val("AI");
+    $('#AIOptionOpener').removeClass('btn-outline-primary');
+    $('#AIOptionOpener').addClass('btn-primary');
+  }else{
+    $('#AIOptionOpener').removeClass('btn-primary');
+    $('#AIOptionOpener').addClass('btn-outline-primary');
+  }
+});    
+
+$('#SelectCategory').on('change', function(){
+  $('#MeleeWeapon').val('');
+  $('#ShotWeapon').val('');
+  $('#Joblisence').val('');
+});    
+
+
+$('#MeleeWeapon, #ShotWeapon, #Joblisence').on('change', function(){
+  const thisvalue=$(this).val().concat();
+
+  $('#MeleeWeapon').val('');
+  $('#ShotWeapon').val('');
+  $('#Joblisence').val('');
+  $(this).val(thisvalue)
+});    
+
+$('#SelectStatusType, #SelectCategory, #MeleeWeapon, #ShotWeapon, #Joblisence, #withGear, #withCombinedParts, #isAlter').on('change', function(){
+  $('#SearchForm').submit();
+});    
+
+
+});
+
+</script>
+
+{% endblock %}   

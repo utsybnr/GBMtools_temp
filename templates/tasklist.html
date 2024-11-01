@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>イベント・アイテム消化チェックリスト</h1>
+
+  {% for Ivent in Ivent_list %}
+  <tr>
+      <td>{{ Ivent.Category }}</td>
+      <td>{{ Ivent.IventName }}</td>
+  </tr>
+  {% endfor %}
+
+{% endblock %}   
+
+{% block extrajs %}
+<script>
+  </script>
+{% endblock %}   

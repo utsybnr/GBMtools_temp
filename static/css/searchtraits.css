@@ -1,0 +1,22 @@
+
+select { 
+  width: 200px; 
+  } 
+
+#WordTag1, #WordTag2 { 
+  width: 100px; 
+  } 
+
+.select_short { 
+  width: 100px; 
+  } 
+
+td, tr {
+  line-height: 100%;
+  font-size: 100%;
+  color: midnightblue;
+  background-color: whitesmoke;
+  text-align: left;
+  margin: auto;
+  padding: auto;
+}
